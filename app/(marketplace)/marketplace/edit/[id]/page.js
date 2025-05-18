@@ -8,7 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Save } from "lucide-react";
@@ -31,12 +37,12 @@ export default function EditProductPage() {
     unit: "kg",
     plasticType: "",
     rewardPoints: "0",
-    discount: "0"
+    discount: "0",
   });
 
   useEffect(() => {
     if (!session) {
-      router.push('/login');
+      router.push("/login");
       return;
     }
 
@@ -47,7 +53,7 @@ export default function EditProductPage() {
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.error || 'Failed to fetch product');
+          throw new Error(data.error || "Failed to fetch product");
         }
 
         if (data.product) {
@@ -58,7 +64,7 @@ export default function EditProductPage() {
               description: "You can only edit your own products",
               variant: "destructive",
             });
-            router.push('/dashboard?tab=products');
+            router.push("/dashboard?tab=products");
             return;
           }
 
@@ -73,11 +79,11 @@ export default function EditProductPage() {
             unit: data.product.unit || "kg",
             plasticType: data.product.plasticType || "",
             rewardPoints: data.product.rewardPoints?.toString() || "0",
-            discount: data.product.discount?.toString() || "0"
+            discount: data.product.discount?.toString() || "0",
           });
         }
       } catch (error) {
-        console.error('Error fetching product:', error);
+        console.error("Error fetching product:", error);
         toast({
           title: "Error",
           description: error.message || "Could not load product details",
@@ -95,16 +101,16 @@ export default function EditProductPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSelectChange = (name, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -114,24 +120,30 @@ export default function EditProductPage() {
 
     try {
       // Validate form data
-      if (!formData.name || !formData.price || !formData.category || 
-          !formData.description || !formData.image || !formData.quantity || 
-          !formData.plasticType) {
-        throw new Error('Please fill in all required fields');
+      if (
+        !formData.name ||
+        !formData.price ||
+        !formData.category ||
+        !formData.description ||
+        !formData.image ||
+        !formData.quantity ||
+        !formData.plasticType
+      ) {
+        throw new Error("Please fill in all required fields");
       }
 
       const response = await fetch(`/api/products/${params.id}`, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to update product');
+        throw new Error(data.error || "Failed to update product");
       }
 
       toast({
@@ -141,9 +153,9 @@ export default function EditProductPage() {
       });
 
       // Redirect back to products tab in dashboard
-      router.push('/dashboard?tab=products');
+      router.push("/dashboard?tab=products");
     } catch (error) {
-      console.error('Error updating product:', error);
+      console.error("Error updating product:", error);
       toast({
         title: "Error",
         description: error.message || "Failed to update product",
@@ -170,9 +182,9 @@ export default function EditProductPage() {
       <div className="py-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold">Edit Product</h1>
-          <Button 
+          <Button
             variant="outline"
-            onClick={() => router.push('/dashboard?tab=products')}
+            onClick={() => router.push("/dashboard?tab=products")}
             className="flex items-center gap-2"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -198,7 +210,7 @@ export default function EditProductPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="price">Price (₹) *</Label>
+                    <Label htmlFor="price">Price (LKR ) *</Label>
                     <Input
                       id="price"
                       name="price"
@@ -214,19 +226,27 @@ export default function EditProductPage() {
 
                   <div>
                     <Label htmlFor="category">Category *</Label>
-                    <Select 
-                      value={formData.category} 
-                      onValueChange={(value) => handleSelectChange('category', value)}
+                    <Select
+                      value={formData.category}
+                      onValueChange={(value) =>
+                        handleSelectChange("category", value)
+                      }
                       required
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="RAW_MATERIALS">Raw Materials</SelectItem>
-                        <SelectItem value="RECYCLED_PRODUCTS">Recycled Products</SelectItem>
+                        <SelectItem value="RAW_MATERIALS">
+                          Raw Materials
+                        </SelectItem>
+                        <SelectItem value="RECYCLED_PRODUCTS">
+                          Recycled Products
+                        </SelectItem>
                         <SelectItem value="CRAFT_ITEMS">Craft Items</SelectItem>
-                        <SelectItem value="UPCYCLED_GOODS">Upcycled Goods</SelectItem>
+                        <SelectItem value="UPCYCLED_GOODS">
+                          Upcycled Goods
+                        </SelectItem>
                         <SelectItem value="OTHER">Other</SelectItem>
                       </SelectContent>
                     </Select>
@@ -234,9 +254,11 @@ export default function EditProductPage() {
 
                   <div>
                     <Label htmlFor="plasticType">Plastic Type *</Label>
-                    <Select 
-                      value={formData.plasticType} 
-                      onValueChange={(value) => handleSelectChange('plasticType', value)}
+                    <Select
+                      value={formData.plasticType}
+                      onValueChange={(value) =>
+                        handleSelectChange("plasticType", value)
+                      }
                       required
                     >
                       <SelectTrigger>
@@ -271,9 +293,11 @@ export default function EditProductPage() {
                         className="flex-1"
                         required
                       />
-                      <Select 
-                        value={formData.unit} 
-                        onValueChange={(value) => handleSelectChange('unit', value)}
+                      <Select
+                        value={formData.unit}
+                        onValueChange={(value) =>
+                          handleSelectChange("unit", value)
+                        }
                         className="w-1/3"
                       >
                         <SelectTrigger>
@@ -344,16 +368,16 @@ export default function EditProductPage() {
               </div>
 
               <div className="flex justify-end gap-3">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => router.push('/dashboard?tab=products')}
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => router.push("/dashboard?tab=products")}
                   disabled={submitting}
                 >
                   Cancel
                 </Button>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="bg-green-600 hover:bg-green-700"
                   disabled={submitting}
                 >
@@ -376,4 +400,4 @@ export default function EditProductPage() {
       </div>
     </Container>
   );
-} 
+}

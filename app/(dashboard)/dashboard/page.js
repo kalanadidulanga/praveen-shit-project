@@ -19,7 +19,7 @@ import {
   Plus,
   Pencil,
   Trash2,
-  Loader2
+  Loader2,
 } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth";
@@ -226,7 +226,7 @@ export default function Dashboard() {
           },
           {
             title: "Total Spent",
-            value: `₹${dashboardData.totalSpent || 0}`,
+            value: `LKR ${dashboardData.totalSpent || 0}`,
             icon: CreditCard,
             description: "Purchase value",
           },
@@ -261,7 +261,7 @@ export default function Dashboard() {
           },
           {
             title: "Total Revenue",
-            value: `₹${dashboardData.totalRevenue || 0}`,
+            value: `LKR ${dashboardData.totalRevenue || 0}`,
             icon: CreditCard,
             description: "Earnings",
           },
@@ -319,7 +319,9 @@ export default function Dashboard() {
               {overviewLoading ? (
                 <div className="min-h-[400px] flex flex-col items-center justify-center gap-4">
                   <Loader2 className="h-8 w-8 animate-spin text-green-600" />
-                  <p className="text-muted-foreground">Loading dashboard data...</p>
+                  <p className="text-muted-foreground">
+                    Loading dashboard data...
+                  </p>
                 </div>
               ) : (
                 <>
@@ -329,43 +331,57 @@ export default function Dashboard() {
                       <CardContent className="p-6">
                         <div className="flex justify-between items-start">
                           <div className="space-y-1">
-                            <p className="text-sm font-medium text-green-800/70">Total Recycled</p>
-                            <h3 className="text-2xl font-bold text-green-950">{totalRecycled.toFixed(1)} kg</h3>
-                            <p className="text-xs text-green-800/60">Since you joined</p>
+                            <p className="text-sm font-medium text-green-800/70">
+                              Total Recycled
+                            </p>
+                            <h3 className="text-2xl font-bold text-green-950">
+                              {totalRecycled.toFixed(1)} kg
+                            </h3>
+                            <p className="text-xs text-green-800/60">
+                              Since you joined
+                            </p>
                           </div>
                           <div className="h-12 w-12 rounded-full bg-green-100/80 flex items-center justify-center">
                             <Recycle className="h-6 w-6 text-green-600" />
                           </div>
                         </div>
                         <div className="mt-4 h-2 bg-green-100 rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-gradient-to-r from-green-500 to-emerald-400" 
-                            style={{ width: `${Math.min(totalRecycled / 5, 100)}%` }} 
+                          <div
+                            className="h-full bg-gradient-to-r from-green-500 to-emerald-400"
+                            style={{
+                              width: `${Math.min(totalRecycled / 5, 100)}%`,
+                            }}
                           />
                         </div>
                         <p className="mt-2 text-xs text-green-800/70">
-                          {totalRecycled > 50 
-                            ? "Amazing progress! Keep it up" 
+                          {totalRecycled > 50
+                            ? "Amazing progress! Keep it up"
                             : "Every bit helps the planet"}
                         </p>
                       </CardContent>
                     </Card>
-                    
+
                     <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-none shadow-sm hover:shadow-md transition-all duration-300">
                       <CardContent className="p-6">
                         <div className="flex justify-between items-start">
                           <div className="space-y-1">
-                            <p className="text-sm font-medium text-blue-800/70">Reward Points</p>
-                            <h3 className="text-2xl font-bold text-blue-950">{dashboardData.points} pts</h3>
-                            <p className="text-xs text-blue-800/60">Available to redeem</p>
+                            <p className="text-sm font-medium text-blue-800/70">
+                              Reward Points
+                            </p>
+                            <h3 className="text-2xl font-bold text-blue-950">
+                              {dashboardData.points} pts
+                            </h3>
+                            <p className="text-xs text-blue-800/60">
+                              Available to redeem
+                            </p>
                           </div>
                           <div className="h-12 w-12 rounded-full bg-blue-100/80 flex items-center justify-center">
                             <Award className="h-6 w-6 text-blue-600" />
                           </div>
                         </div>
                         <div className="mt-4 flex items-center">
-                          <Link 
-                            href="/rewards" 
+                          <Link
+                            href="/rewards"
                             className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors flex items-center group"
                           >
                             Redeem Points
@@ -374,22 +390,28 @@ export default function Dashboard() {
                         </div>
                       </CardContent>
                     </Card>
-                    
+
                     <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-none shadow-sm hover:shadow-md transition-all duration-300">
                       <CardContent className="p-6">
                         <div className="flex justify-between items-start">
                           <div className="space-y-1">
-                            <p className="text-sm font-medium text-purple-800/70">Collections</p>
-                            <h3 className="text-2xl font-bold text-purple-950">{dashboardData.totalCollections}</h3>
-                            <p className="text-xs text-purple-800/60">Total scheduled pickups</p>
+                            <p className="text-sm font-medium text-purple-800/70">
+                              Collections
+                            </p>
+                            <h3 className="text-2xl font-bold text-purple-950">
+                              {dashboardData.totalCollections}
+                            </h3>
+                            <p className="text-xs text-purple-800/60">
+                              Total scheduled pickups
+                            </p>
                           </div>
                           <div className="h-12 w-12 rounded-full bg-purple-100/80 flex items-center justify-center">
                             <Calendar className="h-6 w-6 text-purple-600" />
                           </div>
                         </div>
                         <div className="mt-4 flex items-center">
-                          <Link 
-                            href="/collections" 
+                          <Link
+                            href="/collections"
                             className="text-sm font-medium text-purple-600 hover:text-purple-800 transition-colors flex items-center group"
                           >
                             Schedule Pickup
@@ -398,22 +420,28 @@ export default function Dashboard() {
                         </div>
                       </CardContent>
                     </Card>
-                    
+
                     <Card className="bg-gradient-to-br from-amber-50 to-yellow-50 border-none shadow-sm hover:shadow-md transition-all duration-300">
                       <CardContent className="p-6">
                         <div className="flex justify-between items-start">
                           <div className="space-y-1">
-                            <p className="text-sm font-medium text-amber-800/70">Orders</p>
-                            <h3 className="text-2xl font-bold text-amber-950">{dashboardData.totalOrders}</h3>
-                            <p className="text-xs text-amber-800/60">Products purchased</p>
+                            <p className="text-sm font-medium text-amber-800/70">
+                              Orders
+                            </p>
+                            <h3 className="text-2xl font-bold text-amber-950">
+                              {dashboardData.totalOrders}
+                            </h3>
+                            <p className="text-xs text-amber-800/60">
+                              Products purchased
+                            </p>
                           </div>
                           <div className="h-12 w-12 rounded-full bg-amber-100/80 flex items-center justify-center">
                             <ShoppingBag className="h-6 w-6 text-amber-600" />
                           </div>
                         </div>
                         <div className="mt-4 flex items-center">
-                          <Link 
-                            href="/marketplace" 
+                          <Link
+                            href="/marketplace"
                             className="text-sm font-medium text-amber-600 hover:text-amber-800 transition-colors flex items-center group"
                           >
                             Shop Now
@@ -423,7 +451,7 @@ export default function Dashboard() {
                       </CardContent>
                     </Card>
                   </div>
-                  
+
                   {/* Two Column Layout for Timeline and Impact */}
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Activity Timeline */}
@@ -437,63 +465,91 @@ export default function Dashboard() {
                       <CardContent className="p-0">
                         {dashboardData.recentActivity.length > 0 ? (
                           <div className="divide-y">
-                            {dashboardData.recentActivity.slice(0, 4).map((activity, index) => (
-                              <div key={index} className="p-4 hover:bg-slate-50/50 transition-colors">
-                                <div className="flex items-start gap-4">
-                                  <div className={`mt-1.5 h-8 w-8 rounded-full flex items-center justify-center
-                                    ${activity.type === 'collection' 
-                                      ? 'bg-green-100 text-green-600' 
-                                      : activity.type === 'order' 
-                                        ? 'bg-blue-100 text-blue-600' 
-                                        : 'bg-gray-100 text-gray-600'}`}>
-                                    {activity.type === 'collection' 
-                                      ? <Recycle className="h-4 w-4" /> 
-                                      : activity.type === 'order' 
-                                        ? <ShoppingBag className="h-4 w-4" /> 
-                                        : <User className="h-4 w-4" />}
-                                  </div>
-                                  <div className="flex-1">
-                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                                      <h4 className="font-medium text-slate-900">{activity.title}</h4>
-                                      <time className="text-xs text-slate-500">
-                                        {new Date(activity.date).toLocaleDateString(undefined, { 
-                                          month: 'short', 
-                                          day: 'numeric', 
-                                          hour: '2-digit', 
-                                          minute: '2-digit' 
-                                        })}
-                                      </time>
+                            {dashboardData.recentActivity
+                              .slice(0, 4)
+                              .map((activity, index) => (
+                                <div
+                                  key={index}
+                                  className="p-4 hover:bg-slate-50/50 transition-colors"
+                                >
+                                  <div className="flex items-start gap-4">
+                                    <div
+                                      className={`mt-1.5 h-8 w-8 rounded-full flex items-center justify-center
+                                    ${
+                                      activity.type === "collection"
+                                        ? "bg-green-100 text-green-600"
+                                        : activity.type === "order"
+                                        ? "bg-blue-100 text-blue-600"
+                                        : "bg-gray-100 text-gray-600"
+                                    }`}
+                                    >
+                                      {activity.type === "collection" ? (
+                                        <Recycle className="h-4 w-4" />
+                                      ) : activity.type === "order" ? (
+                                        <ShoppingBag className="h-4 w-4" />
+                                      ) : (
+                                        <User className="h-4 w-4" />
+                                      )}
                                     </div>
-                                    <p className="mt-1 text-sm text-slate-600">{activity.description}</p>
-                                    {activity.status && (
-                                      <span className={`mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                        ${activity.status === 'PENDING' 
-                                          ? 'bg-yellow-100 text-yellow-800' 
-                                          : activity.status === 'COMPLETED' 
-                                            ? 'bg-green-100 text-green-800' 
-                                            : activity.status === 'CANCELLED' 
-                                              ? 'bg-red-100 text-red-800' 
-                                              : 'bg-blue-100 text-blue-800'}`}>
-                                        {activity.status}
-                                      </span>
-                                    )}
+                                    <div className="flex-1">
+                                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                                        <h4 className="font-medium text-slate-900">
+                                          {activity.title}
+                                        </h4>
+                                        <time className="text-xs text-slate-500">
+                                          {new Date(
+                                            activity.date
+                                          ).toLocaleDateString(undefined, {
+                                            month: "short",
+                                            day: "numeric",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                          })}
+                                        </time>
+                                      </div>
+                                      <p className="mt-1 text-sm text-slate-600">
+                                        {activity.description}
+                                      </p>
+                                      {activity.status && (
+                                        <span
+                                          className={`mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                        ${
+                                          activity.status === "PENDING"
+                                            ? "bg-yellow-100 text-yellow-800"
+                                            : activity.status === "COMPLETED"
+                                            ? "bg-green-100 text-green-800"
+                                            : activity.status === "CANCELLED"
+                                            ? "bg-red-100 text-red-800"
+                                            : "bg-blue-100 text-blue-800"
+                                        }`}
+                                        >
+                                          {activity.status}
+                                        </span>
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            ))}
+                              ))}
                           </div>
                         ) : (
                           <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
                             <Calendar className="h-12 w-12 text-slate-300 mb-4" />
-                            <h3 className="text-lg font-medium text-slate-900">No recent activity</h3>
+                            <h3 className="text-lg font-medium text-slate-900">
+                              No recent activity
+                            </h3>
                             <p className="mt-1 text-sm text-slate-500 max-w-sm">
-                              You don't have any activity yet. Start by scheduling a collection or shopping at the marketplace.
+                              You don't have any activity yet. Start by
+                              scheduling a collection or shopping at the
+                              marketplace.
                             </p>
                           </div>
                         )}
                         {dashboardData.recentActivity.length > 0 && (
                           <div className="p-4 border-t">
-                            <Button variant="ghost" className="w-full text-sm text-green-600 hover:text-green-700 hover:bg-green-50 transition-colors">
+                            <Button
+                              variant="ghost"
+                              className="w-full text-sm text-green-600 hover:text-green-700 hover:bg-green-50 transition-colors"
+                            >
                               <span className="flex items-center justify-center">
                                 View All Activity
                                 <ChevronRight className="ml-1 h-4 w-4" />
@@ -503,7 +559,7 @@ export default function Dashboard() {
                         )}
                       </CardContent>
                     </Card>
-                    
+
                     {/* Environmental Impact */}
                     <Card className="border-none shadow-md">
                       <CardHeader className="border-b bg-slate-50/50">
@@ -517,43 +573,80 @@ export default function Dashboard() {
                           <div className="inline-flex items-center justify-center h-24 w-24 rounded-full bg-gradient-to-br from-green-100 to-emerald-50 mb-4">
                             <Recycle className="h-12 w-12 text-green-600" />
                           </div>
-                          <h3 className="text-2xl font-bold text-slate-900">{totalRecycled.toFixed(1)} kg</h3>
-                          <p className="text-sm text-slate-600">Plastic waste diverted from landfill</p>
+                          <h3 className="text-2xl font-bold text-slate-900">
+                            {totalRecycled.toFixed(1)} kg
+                          </h3>
+                          <p className="text-sm text-slate-600">
+                            Plastic waste diverted from landfill
+                          </p>
                         </div>
-                        
+
                         <div className="space-y-4">
                           <div>
                             <div className="flex justify-between text-sm mb-1">
                               <span className="font-medium">CO₂ Reduction</span>
-                              <span className="text-green-600 font-medium">{(totalRecycled * 2.5).toFixed(1)} kg</span>
+                              <span className="text-green-600 font-medium">
+                                {(totalRecycled * 2.5).toFixed(1)} kg
+                              </span>
                             </div>
                             <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-                              <div className="h-full bg-green-500" style={{ width: `${Math.min((totalRecycled * 2.5) / 100 * 100, 100)}%` }}></div>
+                              <div
+                                className="h-full bg-green-500"
+                                style={{
+                                  width: `${Math.min(
+                                    ((totalRecycled * 2.5) / 100) * 100,
+                                    100
+                                  )}%`,
+                                }}
+                              ></div>
                             </div>
                           </div>
-                          
+
                           <div>
                             <div className="flex justify-between text-sm mb-1">
                               <span className="font-medium">Water Saved</span>
-                              <span className="text-blue-600 font-medium">{(totalRecycled * 22).toFixed(1)} L</span>
+                              <span className="text-blue-600 font-medium">
+                                {(totalRecycled * 22).toFixed(1)} L
+                              </span>
                             </div>
                             <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-                              <div className="h-full bg-blue-500" style={{ width: `${Math.min((totalRecycled * 22) / 1000 * 100, 100)}%` }}></div>
+                              <div
+                                className="h-full bg-blue-500"
+                                style={{
+                                  width: `${Math.min(
+                                    ((totalRecycled * 22) / 1000) * 100,
+                                    100
+                                  )}%`,
+                                }}
+                              ></div>
                             </div>
                           </div>
-                          
+
                           <div>
                             <div className="flex justify-between text-sm mb-1">
                               <span className="font-medium">Energy Saved</span>
-                              <span className="text-amber-600 font-medium">{(totalRecycled * 5.8).toFixed(1)} kWh</span>
+                              <span className="text-amber-600 font-medium">
+                                {(totalRecycled * 5.8).toFixed(1)} kWh
+                              </span>
                             </div>
                             <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-                              <div className="h-full bg-amber-500" style={{ width: `${Math.min((totalRecycled * 5.8) / 100 * 100, 100)}%` }}></div>
+                              <div
+                                className="h-full bg-amber-500"
+                                style={{
+                                  width: `${Math.min(
+                                    ((totalRecycled * 5.8) / 100) * 100,
+                                    100
+                                  )}%`,
+                                }}
+                              ></div>
                             </div>
                           </div>
                         </div>
-                        
-                        <Button variant="outline" className="w-full text-sm font-medium text-green-600 hover:text-green-700 border-green-200 hover:bg-green-50">
+
+                        <Button
+                          variant="outline"
+                          className="w-full text-sm font-medium text-green-600 hover:text-green-700 border-green-200 hover:bg-green-50"
+                        >
                           View Detailed Impact Report
                         </Button>
                       </CardContent>
@@ -625,19 +718,19 @@ export default function Dashboard() {
                             {product.discount > 0 ? (
                               <>
                                 <span className="font-extrabold text-lg text-green-600">
-                                  ₹
+                                  LKR
                                   {(
                                     (product.price * (100 - product.discount)) /
                                     100
                                   ).toFixed(2)}
                                 </span>
                                 <span className="text-xs text-gray-500 line-through -mt-1">
-                                  ₹{product.price.toFixed(2)}
+                                  LKR {product.price.toFixed(2)}
                                 </span>
                               </>
                             ) : (
                               <span className="font-extrabold text-lg text-green-600">
-                                ₹{product.price.toFixed(2)}
+                                LKR {product.price.toFixed(2)}
                               </span>
                             )}
                           </div>

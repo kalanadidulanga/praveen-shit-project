@@ -8,7 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { useSession } from "next-auth/react";
-import { ArrowLeft, Calendar, ShoppingBag, MapPin, CreditCard, AlertCircle } from "lucide-react";
+import {
+  ArrowLeft,
+  Calendar,
+  ShoppingBag,
+  MapPin,
+  CreditCard,
+  AlertCircle,
+} from "lucide-react";
 import Link from "next/link";
 
 export default function OrderDetailsPage() {
@@ -26,19 +33,19 @@ export default function OrderDetailsPage() {
         setLoading(true);
         const response = await fetch(`/api/orders/${params.id}`);
         const data = await response.json();
-        
+
         if (!response.ok) {
-          throw new Error(data.error || 'Failed to fetch order details');
+          throw new Error(data.error || "Failed to fetch order details");
         }
-        
+
         setOrder(data.order);
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
         setError(error.message);
         toast({
           title: "Error",
           description: error.message,
-          variant: "destructive"
+          variant: "destructive",
         });
       } finally {
         setLoading(false);
@@ -52,18 +59,18 @@ export default function OrderDetailsPage() {
 
   // Helper to get status badge
   const getStatusBadge = (status) => {
-    switch(status) {
-      case 'PENDING':
+    switch (status) {
+      case "PENDING":
         return <Badge className="bg-yellow-500">Pending</Badge>;
-      case 'ACCEPTED':
+      case "ACCEPTED":
         return <Badge className="bg-blue-500">Accepted</Badge>;
-      case 'PAID':
+      case "PAID":
         return <Badge className="bg-purple-500">Paid</Badge>;
-      case 'DELIVERED':
+      case "DELIVERED":
         return <Badge className="bg-indigo-500">Delivered</Badge>;
-      case 'COMPLETED':
+      case "COMPLETED":
         return <Badge className="bg-green-500">Completed</Badge>;
-      case 'CANCELLED':
+      case "CANCELLED":
         return <Badge className="bg-red-500">Cancelled</Badge>;
       default:
         return <Badge className="bg-gray-500">{status}</Badge>;
@@ -86,7 +93,7 @@ export default function OrderDetailsPage() {
         <div className="text-center">
           <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-red-600">Error</h2>
-          <p className="mt-2 text-gray-600">{error || 'Order not found'}</p>
+          <p className="mt-2 text-gray-600">{error || "Order not found"}</p>
           <Link href="/collection?tab=orders" className="mt-4 inline-block">
             <Button variant="outline" className="mt-4">
               <ArrowLeft className="mr-2 h-4 w-4" />
@@ -114,7 +121,9 @@ export default function OrderDetailsPage() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <CardTitle className="text-2xl">Order Details</CardTitle>
-              <p className="text-sm text-gray-500 mt-1">Order #{order.id.substring(0, 8)}</p>
+              <p className="text-sm text-gray-500 mt-1">
+                Order #{order.id.substring(0, 8)}
+              </p>
             </div>
             {getStatusBadge(order.status)}
           </div>
@@ -128,10 +137,12 @@ export default function OrderDetailsPage() {
                   <Calendar className="h-5 w-5 text-gray-500" />
                   <div>
                     <p className="font-medium">Order Date</p>
-                    <p className="text-gray-600">{new Date(order.createdAt).toLocaleString()}</p>
+                    <p className="text-gray-600">
+                      {new Date(order.createdAt).toLocaleString()}
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <ShoppingBag className="h-5 w-5 text-gray-500" />
                   <div>
@@ -139,28 +150,34 @@ export default function OrderDetailsPage() {
                     <p className="text-gray-600">{order.quantity}</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <CreditCard className="h-5 w-5 text-gray-500" />
                   <div>
                     <p className="font-medium">Payment Method</p>
-                    <p className="text-gray-600">{order.paymentMethod || 'COD'}</p>
+                    <p className="text-gray-600">
+                      {order.paymentMethod || "COD"}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-            
+
             <div>
-              <h3 className="font-semibold text-lg mb-4">Delivery Information</h3>
+              <h3 className="font-semibold text-lg mb-4">
+                Delivery Information
+              </h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <MapPin className="h-5 w-5 text-gray-500" />
                   <div>
                     <p className="font-medium">Delivery Address</p>
-                    <p className="text-gray-600">{order.deliveryAddress || 'Not specified'}</p>
+                    <p className="text-gray-600">
+                      {order.deliveryAddress || "Not specified"}
+                    </p>
                   </div>
                 </div>
-                
+
                 {order.notes && (
                   <div className="flex items-start gap-3">
                     <AlertCircle className="h-5 w-5 text-gray-500" />
@@ -173,13 +190,13 @@ export default function OrderDetailsPage() {
               </div>
             </div>
           </div>
-          
+
           <div className="mt-8 pt-6 border-t">
             <h3 className="font-semibold text-lg mb-4">Price Summary</h3>
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>₹{order.totalPrice.toLocaleString()}</span>
+                <span>LKR {order.totalPrice.toLocaleString()}</span>
               </div>
               <div className="flex justify-between">
                 <span>Shipping</span>
@@ -187,7 +204,7 @@ export default function OrderDetailsPage() {
               </div>
               <div className="flex justify-between font-bold text-lg pt-2 border-t">
                 <span>Total</span>
-                <span>₹{order.totalPrice.toLocaleString()}</span>
+                <span>LKR {order.totalPrice.toLocaleString()}</span>
               </div>
             </div>
           </div>
@@ -195,4 +212,4 @@ export default function OrderDetailsPage() {
       </Card>
     </Container>
   );
-} 
+}

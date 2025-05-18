@@ -6,7 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { useSession } from "next-auth/react";
-import { ShoppingBag, CheckCircle, Clock3, AlertCircle, XCircle, Package } from "lucide-react";
+import {
+  ShoppingBag,
+  CheckCircle,
+  Clock3,
+  AlertCircle,
+  XCircle,
+  Package,
+} from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
@@ -23,8 +30,8 @@ export default function CollectionPage() {
   useEffect(() => {
     // Check if user is a collector, if not redirect to home
     if (session?.user) {
-      if (session.user.userType?.toUpperCase() !== 'COLLECTOR') {
-        router.push('/');
+      if (session.user.userType?.toUpperCase() !== "COLLECTOR") {
+        router.push("/");
         toast({
           title: "Access Restricted",
           description: "Only collectors can access this page",
@@ -39,17 +46,17 @@ export default function CollectionPage() {
   const fetchOrders = async () => {
     try {
       console.log("Fetching orders for collector...");
-      const response = await fetch('/api/orders');
+      const response = await fetch("/api/orders");
       const data = await response.json();
-      
-      if (!response.ok) throw new Error(data.error || 'Failed to fetch orders');
-      
+
+      if (!response.ok) throw new Error(data.error || "Failed to fetch orders");
+
       console.log(`Orders API response:`, data);
-      
+
       if (data.success && Array.isArray(data.orders)) {
         // Sort orders by created date
-        const sorted = data.orders.sort((a, b) => 
-          new Date(b.createdAt) - new Date(a.createdAt)
+        const sorted = data.orders.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
         console.log(`Sorted ${sorted.length} orders`);
         setOrders(sorted);
@@ -58,7 +65,7 @@ export default function CollectionPage() {
         setOrders([]);
       }
     } catch (error) {
-      console.error('Error fetching orders:', error);
+      console.error("Error fetching orders:", error);
       toast({
         title: "Error",
         description: error.message || "Failed to load orders",
@@ -81,63 +88,64 @@ export default function CollectionPage() {
       console.log(`Fetching details for order ${orderId}...`);
       const response = await fetch(`/api/orders/${orderId}`);
       const data = await response.json();
-      
-      if (!response.ok) throw new Error(data.error || 'Failed to fetch order details');
-      
+
+      if (!response.ok)
+        throw new Error(data.error || "Failed to fetch order details");
+
       console.log(`Order details:`, data.order);
-      
+
       // Save details to state
-      setOrderDetails(prev => ({
+      setOrderDetails((prev) => ({
         ...prev,
-        [orderId]: data.order
+        [orderId]: data.order,
       }));
-      
+
       // Expand this order
       setExpandedOrderId(orderId);
     } catch (error) {
-      console.error('Error fetching order details:', error);
+      console.error("Error fetching order details:", error);
       toast({
         title: "Error",
         description: error.message,
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
-  
+
   // Helper to get status badge for orders
   const getOrderStatusBadge = (status) => {
-    switch(status) {
-      case 'PENDING':
+    switch (status) {
+      case "PENDING":
         return <Badge className="bg-yellow-500">Pending</Badge>;
-      case 'ACCEPTED':
+      case "ACCEPTED":
         return <Badge className="bg-blue-500">Accepted</Badge>;
-      case 'PAID':
+      case "PAID":
         return <Badge className="bg-purple-500">Paid</Badge>;
-      case 'DELIVERED':
+      case "DELIVERED":
         return <Badge className="bg-indigo-500">Delivered</Badge>;
-      case 'COMPLETED':
+      case "COMPLETED":
         return <Badge className="bg-green-500">Completed</Badge>;
-      case 'CANCELLED':
+      case "CANCELLED":
         return <Badge className="bg-red-500">Cancelled</Badge>;
       default:
         return <Badge className="bg-gray-500">{status}</Badge>;
     }
   };
-  
+
   // Helper to get icon for order status
   const getOrderStatusIcon = (status) => {
-    switch(status) {
-      case 'PENDING':
+    switch (status) {
+      case "PENDING":
         return <Clock3 className="h-5 w-5 text-yellow-500" />;
-      case 'ACCEPTED':
+      case "ACCEPTED":
         return <CheckCircle className="h-5 w-5 text-blue-500" />;
-      case 'PAID':
+      case "PAID":
         return <ShoppingBag className="h-5 w-5 text-purple-500" />;
-      case 'DELIVERED':
+      case "DELIVERED":
         return <Package className="h-5 w-5 text-indigo-500" />;
-      case 'COMPLETED':
+      case "COMPLETED":
         return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case 'CANCELLED':
+      case "CANCELLED":
         return <XCircle className="h-5 w-5 text-red-500" />;
       default:
         return <AlertCircle className="h-5 w-5 text-gray-500" />;
@@ -147,50 +155,51 @@ export default function CollectionPage() {
   const handleStatusUpdate = async (orderId, newStatus) => {
     try {
       console.log(`Updating order ${orderId} status to ${newStatus}...`);
-      
+
       const response = await fetch(`/api/orders/${orderId}`, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ status: newStatus }),
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
-        console.error('Status update failed:', data);
-        throw new Error(data.error || 'Failed to update order status');
+        console.error("Status update failed:", data);
+        throw new Error(data.error || "Failed to update order status");
       }
-      
-      console.log('Status update successful:', data);
-      
+
+      console.log("Status update successful:", data);
+
       // Update the orders list
-      setOrders(prevOrders => 
-        prevOrders.map(order => 
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
           order.id === orderId ? { ...order, status: newStatus } : order
         )
       );
-      
+
       // Update the order details
       if (orderDetails[orderId]) {
-        setOrderDetails(prev => ({
+        setOrderDetails((prev) => ({
           ...prev,
-          [orderId]: { ...prev[orderId], status: newStatus }
+          [orderId]: { ...prev[orderId], status: newStatus },
         }));
       }
-      
+
       toast({
         title: "Status updated",
         description: `Order status has been updated to ${newStatus}`,
-        variant: "success"
+        variant: "success",
       });
     } catch (error) {
-      console.error('Error updating order status:', error);
+      console.error("Error updating order status:", error);
       toast({
         title: "Error",
-        description: error.message || 'An error occurred while updating the order status',
-        variant: "destructive"
+        description:
+          error.message || "An error occurred while updating the order status",
+        variant: "destructive",
       });
     }
   };
@@ -216,7 +225,7 @@ export default function CollectionPage() {
             Manage customer orders and update their status
           </p>
         </div>
-        
+
         <div className="space-y-6 mt-6">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold">All Orders</h2>
@@ -224,9 +233,9 @@ export default function CollectionPage() {
               <Button>
                 <ShoppingBag className="mr-2 h-4 w-4" />
                 Browse Products
-        </Button>
+              </Button>
             </Link>
-      </div>
+          </div>
 
           {orders.length === 0 ? (
             <Card>
@@ -244,7 +253,10 @@ export default function CollectionPage() {
           ) : (
             <div className="grid gap-4">
               {orders.map((order) => (
-                <Card key={order.id} className="hover:shadow-md transition-shadow">
+                <Card
+                  key={order.id}
+                  className="hover:shadow-md transition-shadow"
+                >
                   <CardContent className="p-6">
                     <div className="flex flex-col sm:flex-row justify-between gap-4">
                       <div className="flex items-start gap-4">
@@ -253,20 +265,24 @@ export default function CollectionPage() {
                         </div>
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <h3 className="font-semibold text-lg">Order #{order.id.substring(0, 8)}</h3>
+                            <h3 className="font-semibold text-lg">
+                              Order #{order.id.substring(0, 8)}
+                            </h3>
                             {getOrderStatusBadge(order.status)}
                           </div>
                           <p className="text-sm text-gray-600 mt-1">
-                            <span className="font-medium">Product:</span> {order.listing?.title || "Unknown Product"}
+                            <span className="font-medium">Product:</span>{" "}
+                            {order.listing?.title || "Unknown Product"}
                           </p>
                           <p className="text-sm text-gray-600 mt-1">
-                            <span className="font-medium">Buyer:</span> {order.buyer?.name || "Unknown User"}
+                            <span className="font-medium">Buyer:</span>{" "}
+                            {order.buyer?.name || "Unknown User"}
                           </p>
                           <p className="text-sm text-gray-600 mt-1">
                             Quantity: {order.quantity} items
                           </p>
                           <p className="text-sm font-medium text-green-600 mt-1">
-                            Total: ₹{order.totalPrice.toLocaleString()}
+                            Total: LKR {order.totalPrice.toLocaleString()}
                           </p>
                         </div>
                       </div>
@@ -274,28 +290,36 @@ export default function CollectionPage() {
                         <div className="text-gray-500 text-sm">
                           {new Date(order.createdAt).toLocaleDateString()}
                         </div>
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
                           onClick={() => fetchOrderDetails(order.id)}
                         >
-                          {expandedOrderId === order.id ? "Hide Details" : "View Details"}
+                          {expandedOrderId === order.id
+                            ? "Hide Details"
+                            : "View Details"}
                         </Button>
                       </div>
                     </div>
-                    
+
                     {/* Expanded Order Details */}
                     {expandedOrderId === order.id && orderDetails[order.id] && (
                       <div className="mt-4 pt-4 border-t border-gray-200">
                         <div className="grid md:grid-cols-2 gap-6">
                           <div>
-                            <h4 className="font-semibold mb-2">Order Information</h4>
+                            <h4 className="font-semibold mb-2">
+                              Order Information
+                            </h4>
                             <p className="text-sm">
                               <span className="font-medium">Order Date:</span>{" "}
-                              {new Date(orderDetails[order.id].createdAt).toLocaleString()}
+                              {new Date(
+                                orderDetails[order.id].createdAt
+                              ).toLocaleString()}
                             </p>
                             <p className="text-sm mt-1">
-                              <span className="font-medium">Payment Method:</span>{" "}
+                              <span className="font-medium">
+                                Payment Method:
+                              </span>{" "}
                               {orderDetails[order.id].paymentMethod || "COD"}
                             </p>
                             {orderDetails[order.id].notes && (
@@ -306,7 +330,9 @@ export default function CollectionPage() {
                             )}
                           </div>
                           <div>
-                            <h4 className="font-semibold mb-2">Buyer Information</h4>
+                            <h4 className="font-semibold mb-2">
+                              Buyer Information
+                            </h4>
                             {orderDetails[order.id].buyer && (
                               <>
                                 <p className="text-sm">
@@ -319,75 +345,95 @@ export default function CollectionPage() {
                                 </p>
                                 <p className="text-sm mt-1">
                                   <span className="font-medium">Phone:</span>{" "}
-                                  {orderDetails[order.id].buyer.phoneNumber || "Not provided"}
+                                  {orderDetails[order.id].buyer.phoneNumber ||
+                                    "Not provided"}
                                 </p>
                                 <p className="text-sm mt-1">
-                                  <span className="font-medium">Delivery Address:</span>{" "}
-                                  {orderDetails[order.id].deliveryAddress || "Not specified"}
+                                  <span className="font-medium">
+                                    Delivery Address:
+                                  </span>{" "}
+                                  {orderDetails[order.id].deliveryAddress ||
+                                    "Not specified"}
                                 </p>
                               </>
                             )}
                           </div>
                         </div>
-                        
+
                         {/* Status Update Buttons */}
                         <div className="mt-4 flex flex-wrap gap-2">
-                          <h4 className="w-full font-semibold mb-2">Update Status:</h4>
-                          {order.status !== 'ACCEPTED' && (
-                            <Button 
-                              size="sm" 
-                              variant="outline" 
+                          <h4 className="w-full font-semibold mb-2">
+                            Update Status:
+                          </h4>
+                          {order.status !== "ACCEPTED" && (
+                            <Button
+                              size="sm"
+                              variant="outline"
                               className="bg-blue-50 text-blue-600 hover:bg-blue-100"
-                              onClick={() => handleStatusUpdate(order.id, 'ACCEPTED')}
+                              onClick={() =>
+                                handleStatusUpdate(order.id, "ACCEPTED")
+                              }
                             >
                               Accept Order
                             </Button>
                           )}
-                          {(order.status === 'ACCEPTED' || order.status === 'PENDING') && (
-                            <Button 
-                              size="sm" 
-                              variant="outline" 
+                          {(order.status === "ACCEPTED" ||
+                            order.status === "PENDING") && (
+                            <Button
+                              size="sm"
+                              variant="outline"
                               className="bg-purple-50 text-purple-600 hover:bg-purple-100"
-                              onClick={() => handleStatusUpdate(order.id, 'PAID')}
+                              onClick={() =>
+                                handleStatusUpdate(order.id, "PAID")
+                              }
                             >
                               Mark as Paid
                             </Button>
                           )}
-                          {(order.status === 'PAID' || order.status === 'ACCEPTED') && (
-                            <Button 
-                              size="sm" 
-                              variant="outline" 
+                          {(order.status === "PAID" ||
+                            order.status === "ACCEPTED") && (
+                            <Button
+                              size="sm"
+                              variant="outline"
                               className="bg-indigo-50 text-indigo-600 hover:bg-indigo-100"
-                              onClick={() => handleStatusUpdate(order.id, 'DELIVERED')}
+                              onClick={() =>
+                                handleStatusUpdate(order.id, "DELIVERED")
+                              }
                             >
                               Mark as Delivered
                             </Button>
                           )}
-                          {order.status !== 'COMPLETED' && order.status !== 'CANCELLED' && (
-                            <Button 
-                              size="sm" 
-                              variant="outline" 
-                              className="bg-green-50 text-green-600 hover:bg-green-100"
-                              onClick={() => handleStatusUpdate(order.id, 'COMPLETED')}
-                            >
-                              Complete Order
-                            </Button>
-                          )}
-                          {order.status !== 'CANCELLED' && order.status !== 'COMPLETED' && (
-                            <Button 
-                              size="sm" 
-                              variant="outline" 
-                              className="bg-red-50 text-red-600 hover:bg-red-100"
-                              onClick={() => handleStatusUpdate(order.id, 'CANCELLED')}
-                            >
-                              Cancel Order
-                            </Button>
-                          )}
+                          {order.status !== "COMPLETED" &&
+                            order.status !== "CANCELLED" && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="bg-green-50 text-green-600 hover:bg-green-100"
+                                onClick={() =>
+                                  handleStatusUpdate(order.id, "COMPLETED")
+                                }
+                              >
+                                Complete Order
+                              </Button>
+                            )}
+                          {order.status !== "CANCELLED" &&
+                            order.status !== "COMPLETED" && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="bg-red-50 text-red-600 hover:bg-red-100"
+                                onClick={() =>
+                                  handleStatusUpdate(order.id, "CANCELLED")
+                                }
+                              >
+                                Cancel Order
+                              </Button>
+                            )}
                         </div>
-            </div>
-          )}
+                      </div>
+                    )}
                   </CardContent>
-            </Card>
+                </Card>
               ))}
             </div>
           )}
@@ -395,4 +441,4 @@ export default function CollectionPage() {
       </div>
     </Container>
   );
-} 
+}

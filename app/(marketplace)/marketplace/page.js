@@ -9,22 +9,36 @@ import { Card } from "@/components/ui/card";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, Filter, ChevronDown, Plus, Eye, ShoppingCart, Award } from "lucide-react";
+import {
+  Search,
+  Filter,
+  ChevronDown,
+  Plus,
+  Eye,
+  ShoppingCart,
+  Award,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { useAuth } from "@/lib/auth";
 
 // Add this helper function before the MarketplacePage component
 const formatDate = (dateString) => {
   try {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   } catch (error) {
-    return 'Recently';
+    return "Recently";
   }
 };
 
@@ -38,7 +52,7 @@ export default function MarketplacePage() {
   const [totalPages, setTotalPages] = useState(1);
   const [sortBy, setSortBy] = useState("newest");
   const [randomId, setRandomId] = useState(null);
-  
+
   const router = useRouter();
   const { data: session } = useSession();
   const { toast } = useToast();
@@ -57,18 +71,18 @@ export default function MarketplacePage() {
 
         const response = await fetch(`/api/products?${params.toString()}`);
         if (!response.ok) {
-          throw new Error('Failed to fetch products');
+          throw new Error("Failed to fetch products");
         }
 
         const data = await response.json();
-        console.log('Raw product data:', data.products); // Debug log
+        console.log("Raw product data:", data.products); // Debug log
         setProducts(data.products || []);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error("Error fetching products:", error);
         toast({
           title: "Error",
           description: "Failed to load products",
-          variant: "destructive"
+          variant: "destructive",
         });
       } finally {
         setLoading(false);
@@ -80,8 +94,10 @@ export default function MarketplacePage() {
 
   // Filter and sort products
   const filteredProducts = products.filter((product) => {
-    const matchesCategory = categoryFilter === "all" || product.category === categoryFilter;
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesCategory =
+      categoryFilter === "all" || product.category === categoryFilter;
+    const matchesSearch =
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
@@ -106,7 +122,7 @@ export default function MarketplacePage() {
     { id: "home", name: "Home & Living" },
     { id: "furniture", name: "Furniture" },
     { id: "stationery", name: "Stationery" },
-    { id: "kitchen", name: "Kitchen" }
+    { id: "kitchen", name: "Kitchen" },
   ];
 
   const viewDetails = (productId, e) => {
@@ -121,7 +137,7 @@ export default function MarketplacePage() {
       <Button
         variant="outline"
         disabled={page === 1}
-        onClick={() => setPage(p => p - 1)}
+        onClick={() => setPage((p) => p - 1)}
       >
         Previous
       </Button>
@@ -131,7 +147,7 @@ export default function MarketplacePage() {
       <Button
         variant="outline"
         disabled={page === totalPages}
-        onClick={() => setPage(p => p + 1)}
+        onClick={() => setPage((p) => p + 1)}
       >
         Next
       </Button>
@@ -193,14 +209,14 @@ export default function MarketplacePage() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        
+
         <div className="flex gap-2">
           <Select value={categoryFilter} onValueChange={setCategoryFilter}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
-              {categories.map(category => (
+              {categories.map((category) => (
                 <SelectItem key={category.id} value={category.id}>
                   {category.name}
                 </SelectItem>
@@ -224,10 +240,7 @@ export default function MarketplacePage() {
       {/* Products Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {sortedProducts.map((product) => (
-          <Link 
-            key={product._id}
-            href={`/marketplace/${product._id}`}
-          >
+          <Link key={product._id} href={`/marketplace/${product._id}`}>
             <Card className="overflow-hidden h-full transition-all duration-300 hover:shadow-lg group border border-gray-100">
               <div className="relative">
                 {/* Product Image with Overlay */}
@@ -239,41 +252,51 @@ export default function MarketplacePage() {
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  
+
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  
+
                   {/* Status Badges */}
                   <div className="absolute top-3 left-3 flex flex-col gap-2">
                     {!product.inStock && (
-                      <Badge className="bg-red-500 text-white px-2 py-1">Out of Stock</Badge>
+                      <Badge className="bg-red-500 text-white px-2 py-1">
+                        Out of Stock
+                      </Badge>
                     )}
                     {product.isNew && (
-                      <Badge className="bg-blue-500 text-white px-2 py-1">New Arrival</Badge>
+                      <Badge className="bg-blue-500 text-white px-2 py-1">
+                        New Arrival
+                      </Badge>
                     )}
                     {product.discount && (
-                      <Badge className="bg-amber-500 text-white px-2 py-1">-{product.discount}%</Badge>
+                      <Badge className="bg-amber-500 text-white px-2 py-1">
+                        -{product.discount}%
+                      </Badge>
                     )}
                   </div>
-                  
+
                   {/* Quick Actions */}
                   <div className="absolute right-3 top-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transform translate-x-3 group-hover:translate-x-0 transition-all duration-300">
-                    <Button 
-                      onClick={(e) => viewDetails(product._id, e)} 
-                      variant="default" 
-                      size="icon" 
+                    <Button
+                      onClick={(e) => viewDetails(product._id, e)}
+                      variant="default"
+                      size="icon"
                       className="bg-white text-gray-800 hover:bg-gray-100 rounded-full h-9 w-9 shadow-md"
                     >
                       <Eye className="h-4 w-4" />
                     </Button>
-                    <Button 
+                    <Button
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         // Add to cart functionality
-                        const cart = JSON.parse(localStorage.getItem('ecorecycleCart') || '[]');
-                        const existingProductIndex = cart.findIndex(item => item._id === product._id);
-                        
+                        const cart = JSON.parse(
+                          localStorage.getItem("ecorecycleCart") || "[]"
+                        );
+                        const existingProductIndex = cart.findIndex(
+                          (item) => item._id === product._id
+                        );
+
                         if (existingProductIndex >= 0) {
                           cart[existingProductIndex].quantity += 1;
                         } else {
@@ -283,60 +306,70 @@ export default function MarketplacePage() {
                             price: product.price,
                             image: product.image,
                             quantity: 1,
-                            discount: product.discount || 0
+                            discount: product.discount || 0,
                           });
                         }
-                        
-                        localStorage.setItem('ecorecycleCart', JSON.stringify(cart));
-                        
+
+                        localStorage.setItem(
+                          "ecorecycleCart",
+                          JSON.stringify(cart)
+                        );
+
                         // Dispatch event for header to update cart count
                         setTimeout(() => {
-                          window.dispatchEvent(new Event('cartUpdated'));
+                          window.dispatchEvent(new Event("cartUpdated"));
                         }, 0);
-                        
+
                         toast({
                           title: "Added to Cart",
                           description: `${product.name} has been added to your cart`,
-                          variant: "success"
+                          variant: "success",
                         });
                       }}
-                      variant="default" 
-                      size="icon" 
+                      variant="default"
+                      size="icon"
                       className="bg-white text-gray-800 hover:bg-gray-100 rounded-full h-9 w-9 shadow-md"
                     >
                       <ShoppingCart className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>
-                
+
                 {/* View Details Strip */}
-                <div 
+                <div
                   className={`absolute bottom-0 left-0 right-0 bg-green-600 text-white py-1 px-4 flex items-center justify-center cursor-pointer transform transition-transform duration-300 ${
-                    hoveredProduct === product._id ? 'translate-y-0' : 'translate-y-full'
-                  } ${!product.inStock ? 'bg-gray-400' : ''}`}
+                    hoveredProduct === product._id
+                      ? "translate-y-0"
+                      : "translate-y-full"
+                  } ${!product.inStock ? "bg-gray-400" : ""}`}
                   onClick={(e) => viewDetails(product._id, e)}
                 >
                   <Eye className="h-4 w-4 mr-2" />
                   View Details
                 </div>
               </div>
-              
+
               {/* Product Content */}
               <div className="p-4">
                 {/* Category */}
-                <Badge variant="outline" className="text-xs px-2 py-0 border-green-200 text-green-700 bg-green-50 mb-2">
+                <Badge
+                  variant="outline"
+                  className="text-xs px-2 py-0 border-green-200 text-green-700 bg-green-50 mb-2"
+                >
                   {product.category}
                 </Badge>
-                
+
                 {/* Product Name */}
                 <h3 className="font-medium text-base line-clamp-1 mt-1 group-hover:text-green-600 transition-colors">
                   {product.name}
                 </h3>
-                
+
                 {/* Add Seller Information */}
                 <div className="flex items-center gap-2 mt-2">
                   <Badge variant="secondary" className="text-xs">
-                    {product.seller.userType === 'business' ? 'Business Seller' : 'Individual Seller'}
+                    {product.seller.userType === "business"
+                      ? "Business Seller"
+                      : "Individual Seller"}
                   </Badge>
                   <span className="text-xs text-gray-500">
                     Posted by {product.seller.name}
@@ -345,32 +378,41 @@ export default function MarketplacePage() {
 
                 {/* Add Posted Date */}
                 <div className="text-xs text-gray-500 mt-1">
-                  Posted {product.createdAt ? formatDate(product.createdAt) : 'Recently'}
+                  Posted{" "}
+                  {product.createdAt
+                    ? formatDate(product.createdAt)
+                    : "Recently"}
                 </div>
-                
+
                 {/* Description */}
                 <p className="text-sm text-gray-600 mt-3 line-clamp-2 mb-4 min-h-[2.5rem]">
                   {product.description}
                 </p>
-                
+
                 {/* Modified Price and Seller section */}
                 <div className="mt-1 flex items-center justify-between">
                   <div>
                     {product.discount > 0 && (
                       <span className="text-xs text-gray-500 line-through mr-1">
-                        ₹{product.price}
+                        LKR {product.price}
                       </span>
                     )}
                     <span className="font-medium text-green-600">
-                      ₹{product.discount > 0 
-                        ? Math.round(product.price - (product.price * product.discount / 100)) 
+                      LKR{" "}
+                      {product.discount > 0
+                        ? Math.round(
+                            product.price -
+                              (product.price * product.discount) / 100
+                          )
                         : product.price}
                     </span>
                   </div>
                   {product.rewardPoints > 0 && (
                     <div className="flex items-center space-x-1">
                       <Award className="h-3 w-3 text-green-600" />
-                      <span className="text-xs font-medium text-green-600">{product.rewardPoints} pts</span>
+                      <span className="text-xs font-medium text-green-600">
+                        {product.rewardPoints} pts
+                      </span>
                     </div>
                   )}
                 </div>
@@ -384,4 +426,4 @@ export default function MarketplacePage() {
       {!loading && sortedProducts.length > 0 && <Pagination />}
     </Container>
   );
-} 
+}
