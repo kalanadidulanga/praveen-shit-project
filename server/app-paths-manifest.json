@@ -1,0 +1,6 @@
+{
+  "/api/auth/validate-session/route": "app/api/auth/validate-session/route.js",
+  "/api/user/points/route": "app/api/user/points/route.js",
+  "/(dashboard)/dashboard/page": "app/(dashboard)/dashboard/page.js",
+  "/(marketplace)/marketplace/edit/[id]/page": "app/(marketplace)/marketplace/edit/[id]/page.js"
+}

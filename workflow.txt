@@ -1,0 +1,207 @@
+# Plastic Management System Workflow Documentation
+
+## System Architecture Overview
+
+The application follows Next.js 15+ App Router architecture with the following structure:
+
+```typescript:app/layout.js
+/app
+├── (auth)              # Authentication routes
+├── (dashboard)         # Dashboard routes by role
+├── (marketplace)       # Marketplace features
+├── (waste-management)  # Waste processing features
+├── (logistics)         # Logistics management
+├── (rewards)           # Reward system
+├── (reviews)           # Review and rating system
+├── (payments)         # Payment processing
+└── api                # API routes
+```
+
+## Detailed Feature Workflows
+
+### 1. Authentication & User Management
+```typescript:app/(auth)/layout.js
+/app/(auth)
+├── login
+│   └── page.js           # Login form
+├── register
+│   ├── individual.js     # Individual registration
+│   ├── community.js      # Community registration
+│   ├── business.js       # Business registration
+│   └── collector.js      # Waste collector registration
+└── profile
+    └── page.js           # Profile management
+```
+
+### 2. Role-Based Dashboards
+```typescript:app/(dashboard)/layout.js
+/app/(dashboard)
+├── individual
+│   ├── history.js        # Collection history
+│   ├── rewards.js        # Points dashboard
+│   └── schedules.js      # Pickup schedules
+├── community
+│   ├── statistics.js     # Community stats
+│   ├── drives.js         # Collection drives
+│   └── members.js        # Member management
+├── business
+│   ├── purchases.js      # Purchase history
+│   ├── inventory.js      # Inventory management
+│   └── suppliers.js      # Supplier management
+└── collector
+    ├── routes.js         # Collection routes
+    ├── schedules.js      # Pickup schedules
+    └── sales.js          # Sales history
+```
+
+### 3. Marketplace System
+```typescript:app/(marketplace)/layout.js
+/app/(marketplace)
+├── listings
+│   ├── create.js         # Create listing
+│   ├── edit/[id].js      # Edit listing
+│   └── [id].js           # Listing details
+├── browse
+│   ├── page.js           # Browse listings
+│   └── filter.js         # Filter component
+├── transactions
+│   ├── inquiry.js        # Make inquiry
+│   ├── negotiate.js      # Negotiation
+│   └── purchase.js       # Purchase flow
+└── orders
+    ├── tracking.js       # Order tracking
+    └── history.js        # Order history
+```
+
+### 4. Waste Management
+```typescript:app/(waste-management)/layout.js
+/app/(waste-management)
+├── collection
+│   ├── schedule.js       # Schedule pickup
+│   ├── routes.js         # Route management
+│   └── optimize.js       # Route optimization
+├── categorization
+│   ├── types.js          # Waste types
+│   └── assessment.js     # Quality assessment
+└── processing
+    ├── grade.js          # Grading system
+    └── status.js         # Processing status
+```
+
+### 5. Logistics Management
+```typescript:app/(logistics)/layout.js
+/app/(logistics)
+├── transport
+│   ├── vehicles.js       # Vehicle management
+│   ├── routes.js         # Route planning
+│   └── schedule.js       # Delivery scheduling
+├── tracking
+│   ├── realtime.js       # Real-time tracking
+│   └── updates.js        # Status updates
+└── partners
+    ├── companies.js      # Transport partners
+    └── centers.js        # Recycling centers
+```
+
+### 6. Reward System
+```typescript:app/(rewards)/layout.js
+/app/(rewards)
+├── points
+│   ├── earn.js           # Earning points
+│   └── history.js        # Points history
+├── catalog
+│   ├── rewards.js        # Available rewards
+│   └── redeem.js         # Redemption
+└── incentives
+    ├── business.js       # Business rewards
+    └── loyalty.js        # Loyalty program
+```
+
+### 7. Review & Rating System
+```typescript:app/(reviews)/layout.js
+/app/(reviews)
+├── transactions
+│   ├── create.js         # Create review
+│   └── view.js           # View reviews
+├── quality
+│   ├── feedback.js       # Quality feedback
+│   └── ratings.js        # Rating system
+└── disputes
+    ├── report.js         # Report issue
+    └── resolve.js        # Resolution center
+```
+
+### 8. Payment System
+```typescript:app/(payments)/layout.js
+/app/(payments)
+├── process
+│   ├── checkout.js       # Payment processing
+│   └── methods.js        # Payment methods
+├── wallet
+│   ├── balance.js        # Wallet management
+│   └── transactions.js   # Transaction history
+└── reports
+    ├── sales.js          # Sales reports
+    └── analytics.js      # Financial analytics
+```
+
+### 9. API Routes Structure
+```typescript:app/api/layout.js
+/app/api
+├── auth
+│   ├── [...nextauth].js  # Authentication
+│   └── register.js       # Registration
+├── marketplace
+│   ├── listings.js       # Listing management
+│   └── orders.js         # Order management
+├── waste
+│   ├── collection.js     # Collection management
+│   └── processing.js     # Processing management
+├── logistics
+│   ├── tracking.js       # Tracking endpoints
+│   └── delivery.js       # Delivery management
+├── rewards
+│   ├── points.js         # Points management
+│   └── redemption.js     # Reward redemption
+├── reviews
+│   ├── ratings.js        # Rating management
+│   └── disputes.js       # Dispute handling
+└── payments
+    ├── process.js        # Payment processing
+    └── wallet.js         # Wallet management
+```
+
+## Component Structure
+```typescript:components/layout.js
+/components
+├── ui                    # Shadcn UI components
+├── forms                 # Form components
+├── tables               # Table components
+├── charts               # Chart components
+├── maps                 # Map components
+└── shared               # Shared components
+```
+
+## Database Schema
+The application uses Prisma with MongoDB. Schema definitions are located in:
+```prisma:prisma/schema.prisma
+/prisma
+└── schema.prisma        # Database schema
+```
+
+## State Management
+```typescript:lib/store.js
+/lib
+└── store               # State management
+```
+
+## Utilities
+```typescript:utils/layout.js
+/utils
+├── auth.js             # Authentication utilities
+├── validation.js       # Form validation
+├── formatting.js       # Data formatting
+└── helpers.js          # Helper functions
+```
+
+Would you like me to create any specific implementation files from this structure or provide more detailed documentation for any particular section?

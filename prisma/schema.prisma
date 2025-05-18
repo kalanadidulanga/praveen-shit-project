@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+model User {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  email          String    @unique
+  password       String
+  userType       String    @default("INDIVIDUAL")
+  profileImage   String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  points         Int       @default(0)
+  phoneNumber    String?
+  address        String?
+  district       String?
+  isVerified     Boolean   @default(false)
+  collections    Collection[] @relation("UserCollections")
+  orders         Order[]   @relation("UserOrders")
+  listings       Listing[] @relation("UserListings")
+  reviews        Review[]  @relation("UserReviews")
+  products       Product[]
+}
+
+model Collection {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String    @db.ObjectId
+  user           User      @relation("UserCollections", fields: [userId], references: [id])
+  type           CollectionType
+  date           DateTime
+  status         CollectionStatus @default(SCHEDULED)
+  address        String
+  wasteType      String
+  quantity       Float
+  notes          String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Listing {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String    @db.ObjectId
+  user           User      @relation("UserListings", fields: [userId], references: [id])
+  title          String
+  description    String
+  wasteType      String
+  quantity       Float
+  price          Float
+  location       String
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  orders         Order[]   @relation("ListingOrders")
+}
+
+model Order {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  listingId      String?   @db.ObjectId
+  listing        Listing?  @relation("ListingOrders", fields: [listingId], references: [id])
+  buyerId        String    @db.ObjectId
+  buyer          User      @relation("UserOrders", fields: [buyerId], references: [id])
+  quantity       Float
+  totalPrice     Float
+  status         OrderStatus @default(PENDING)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  reviews        Review[]  @relation("OrderReviews")
+}
+
+model Review {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  orderId        String    @db.ObjectId
+  order          Order     @relation("OrderReviews", fields: [orderId], references: [id])
+  userId         String    @db.ObjectId
+  user           User      @relation("UserReviews", fields: [userId], references: [id])
+  rating         Int
+  comment        String?
+  createdAt      DateTime  @default(now())
+}
+
+model Product {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  price          Float
+  category       String
+  description    String
+  image          String
+  seller         User      @relation(fields: [sellerId], references: [id])
+  sellerId       String    @db.ObjectId
+  rating         Float     @default(0)
+  reviews        Int       @default(0)
+  inStock        Boolean   @default(true)
+  isNew          Boolean   @default(false)
+  discount       Int       @default(0)
+  quantity       Int       @default(0)
+  unit           String    @default("kg")
+  plasticType    String?
+  rewardPoints   Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+enum UserType {
+  INDIVIDUAL
+  COMMUNITY
+  BUSINESS
+  COLLECTOR
+}
+
+enum CollectionType {
+  PICKUP
+  DROPOFF
+}
+
+enum CollectionStatus {
+  SCHEDULED
+  INPROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum OrderStatus {
+  PENDING
+  ACCEPTED
+  PAID
+  DELIVERED
+  COMPLETED
+  CANCELLED
+} 
